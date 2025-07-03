@@ -1,15 +1,15 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { UserService } from './user.service';
-import { registerDto, updatedDto } from './dto/user.dto';
+import { QueryDto, registerDto, updatedDto } from './dto/user.dto';
 
 @Controller('api/user')
 export class UserController {
 constructor(private userService:UserService){}
 
 
-    @Get("all")
-    Allusers(){
-        return this.userService.Allusers()
+    @Get("query/all")
+    Allusers(@Query() payload:QueryDto){
+        return this.userService.Allusers(payload)
 
     }
 

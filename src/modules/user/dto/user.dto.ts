@@ -55,3 +55,32 @@ export class updatedDto{
     
     
     }
+    export class QueryDto{
+
+        @ApiProperty()
+        @IsString()
+        @IsOptional()
+        name?:string
+        
+        @ApiProperty()
+        @IsOptional()
+        @IsString()
+        phone?:string
+        
+        @ApiProperty()
+        @IsOptional()
+        @IsString()
+        address?:string
+        
+        @ApiProperty()
+        @IsOptional()
+        @IsEmail()
+        email?:string
+        
+        @ApiProperty()
+        @IsOptional()
+        @IsString()
+        age?:string
+        
+        
+        }

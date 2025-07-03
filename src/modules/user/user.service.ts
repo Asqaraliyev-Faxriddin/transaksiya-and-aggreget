@@ -1,49 +1,61 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/core/database/prisma.service";
-import { registerDto, updatedDto } from "./dto/user.dto";
+import { QueryDto, registerDto, updatedDto } from "./dto/user.dto";
+import { filter } from "rxjs";
 
 @Injectable()
 export class UserService {
 constructor(private prisma:PrismaService){}
 
-async Allusers(){
+async Allusers(payload:QueryDto){
 
-    let aggreggate = this.prisma.user.aggregate(
-        {
-            _max:{id:true},
-            _min:{id:true},
-            _count:true
+   let filters:any =[]
+    if(payload.name)  filters.push({
+        name: {
+          contains: payload.name,
+          mode: 'insensitive'
         }
-    )
+      });
+    if(payload.age) filters.push({
+        name: {
+          contains: payload.name,
+          mode: 'insensitive'
+        }
+      });
+    if(payload.phone) filters.push({
+        name: {
+          contains: payload.name,
+          mode: 'insensitive'
+        }
+      });
+    if(payload.email) filters.push({
+        name: {
+          contains: payload.name,
+          mode: 'insensitive'
+        }
+      });
+        
+
+
 
     let data = await this.prisma.user.findMany({
-        select:{
-            id:true,
-            name:true,
-            age:true,
-            phone:true,
-            posts:{
-                select:{
-                    id:true,
-                    title:true,
-                    body:true,
-                    comment:{
-                        select:{
-                            id:true,
-                            name:true
-                        
-                        }
-                    }
-                }
-            }
-
+        where:{
+            OR:filters
         },
-        orderBy:{
-            "age":"asc"
-        }
+        select:{
+            name:true,
+            email:true,
+            phone:true,
+            age:true,
+        
+    
+        },
+        
     })
-    return {data,aggreggate}
 
+    return {
+        data,
+    }
 }
 
 async AddUser(payload:registerDto){

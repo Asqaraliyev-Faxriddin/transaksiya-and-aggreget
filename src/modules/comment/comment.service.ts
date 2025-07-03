@@ -64,7 +64,9 @@ export class CommentService {
 
 
   async remove(id: string) {
-    
+
+
+
     let oldComment = await this.prisma.comment.delete({where:{id}})
     if(!oldComment) throw new NotFoundException("Comment not found")
 
