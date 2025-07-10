@@ -1,7 +1,8 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException, Post } from "@nestjs/common";
 import { PrismaService } from "src/core/database/prisma.service";
 import { QueryDto, registerDto, updatedDto } from "./dto/user.dto";
 import { filter } from "rxjs";
+import { title } from "process";
 
 @Injectable()
 export class UserService {
@@ -58,7 +59,7 @@ async Allusers(payload:QueryDto){
     }
 }
 
-async AddUser(payload:registerDto){
+async AddUser(payload:any){
     let oldemail = await this.prisma.user.findFirst({where:{email:payload.email}})
     if(oldemail) throw new ConflictException("email already exist")
     
@@ -135,6 +136,43 @@ try {
 })
 
 return { message: "Muvaffaqiyatli transaksiya bo'ldi." }
+}
+
+async getUser(name:string){
+  let data = await  this.prisma.user.findFirst({where:{name:name}})
+
+  return data
+
+}
+
+
+
+async getUsers(){
+  
+
+  let data = await this.prisma.user.findMany({
+    select:{
+        id:true,
+        name:true,
+        post:{
+            select:{
+                id:true,
+                title:true,
+                commet:{
+                  id:true,
+                  name:true
+                }
+            },
+            
+            
+        },
+  
+    }
+}) 
+
+
+return data
+
 }
 
 
